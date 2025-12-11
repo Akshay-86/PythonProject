@@ -9,14 +9,16 @@ def nonlocalmean(src: ImageLike, imgToDenoiseIndex: int = 0, temporalWindowSize:
     """
     Advanced blur technique that excels at reducing noise while preserving sharp edges.
 
+    Paramaters with * at end are mandatory parameters.
+
     Parameters
     ----------
-    src : ndarray or list of ndarrays
+    src : ndarray or list of ndarrays *
         If sel in {0,1} pass a single image ndarray.
         If sel in {2,3} pass a list of nearby frames (all same shape & dtype).
-    imgToDenoiseIndex : int
+    imgToDenoiseIndex : int *
         Index of target frame in list (used for sel 2 or 3).
-    temporalWindowSize : int
+    temporalWindowSize : int *
         Number of frames used (must be odd and >=1) for sel 2 or 3.
     dst : ndarray or None
         Optional output buffer.
@@ -33,6 +35,13 @@ def nonlocalmean(src: ImageLike, imgToDenoiseIndex: int = 0, temporalWindowSize:
         1 -> fastNlMeansDenoisingColored (color), 
         2 -> fastNlMeansDenoisingMulti (grayscale list), 
         3 -> fastNlMeansDenoisingColoredMulti (color list).
+
+    Returns:
+        Image_ndarray: Result Blured Image.
+        
+    Raises:
+        ValueError: If bad arguments recived.
+
     """
     # basic sel validation
     if not isinstance(sel, int) or sel < 0 or sel > 3:
@@ -94,11 +103,18 @@ def nonlocalmean(src: ImageLike, imgToDenoiseIndex: int = 0, temporalWindowSize:
     
 
 if __name__=="__main__":
-    img = cv2.imread("/home/robo/Documents/mouse.jpeg",cv2.IMREAD_GRAYSCALE)
+    src  = "inputs/1.jpg"
+    img = cv2.imread(src,cv2.IMREAD_GRAYSCALE)
+    dst = np.array([])
+    h = 10
+    hColor = 10
+    templateWindowSize = 7
+    searchWindowSize = 21
+    sel = 0
 
-    res = nonlocalmean(img,h=10,hColor=10,sel=0)
-
+    res = nonlocalmean(img,h,hColor,sel)
+    cv2.putText(res,f"h: {h},hColor: {hColor},templateWindowSize:{templateWindowSize},searchWindowSize:{searchWindowSize}",(0,15),5,1,(0,0,255))
     cv2.imshow("",res)
-    cv2.imwrite("test/Noice Reduction/NonLocalMean_Filter/h=10,hColor=10,sel=0.jpeg",res)
+    cv2.imwrite("test/noice_reduction/nonLocalMean_filter/1.jpg",res)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

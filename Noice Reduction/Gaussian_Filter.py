@@ -29,20 +29,23 @@ def gaussian_blur(src: np.ndarray,ksize: tuple[int,int],sigmaX: float,dst: np.nd
         raise ValueError("ksize must be positive")
     if ksize[0]%2 == 0 or ksize[1]%2 == 0:
         raise ValueError("ksize values must be odd Number")
-
-
-    return  cv2.GaussianBlur(src,ksize,sigmaX,dst=dst,sigmaY=sigmaY,borderType=borderType)
+    
+    outimg = cv2.GaussianBlur(src,ksize,sigmaX,dst=dst,sigmaY=sigmaY,borderType=borderType)
+    return  outimg
 
     
 
 
 if __name__=="__main__":
-
-    img = cv2.imread("/home/robo/Documents/image.jpg")
-
-    res = gaussian_blur(img,(3,3),5,sigmaY=20)
-
+    src = "inputs/5.jpg"
+    img = cv2.imread(src)
+    ksize = (3,3)
+    sigmaX = 5
+    dst = np.array([])
+    sigmaY = 20 
+    res = gaussian_blur(img,ksize,sigmaX,sigmaY)
+    cv2.putText(res,f"ksize{ksize},sigmaX:{sigmaX},sigmaY:{sigmaY}",(0,15),5,1,(0,0,255))
     cv2.imshow("",res)
-    cv2.imwrite("test/Noice Reduction/ksize:(3,3),sigmax:5,sigmay:20.jpg",res)
+    cv2.imwrite("test/noice_reduction/gaussian_filter/1.jpg",res)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
