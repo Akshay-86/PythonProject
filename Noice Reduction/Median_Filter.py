@@ -1,7 +1,9 @@
 import cv2
+import time 
 import numpy as np
 
 def median_blur(src: np.ndarray,ksize: int)->np.ndarray:
+    starttime = time.time()
     """
         Applying non-linear medianBlur filter
 
@@ -24,6 +26,8 @@ def median_blur(src: np.ndarray,ksize: int)->np.ndarray:
         raise ValueError("ksize must be positive and odd number")
     
     outimg = cv2.medianBlur(src,ksize)
+    endtime = time.time()
+    print("Runtime: ",endtime-starttime)
     return outimg
 
 

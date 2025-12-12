@@ -1,7 +1,9 @@
 import cv2
+import time
 import numpy as np
 
 def znormalize(src: np.ndarray) -> np.ndarray:
+    starttime = time.time()
     """
     Docstring for znormalize
     
@@ -26,11 +28,13 @@ def znormalize(src: np.ndarray) -> np.ndarray:
 
     normalized_img = (img_float - mean) / std
 
+    endtime = time.time()
+    print("Runtime: ",endtime-starttime)
     return normalized_img
 
 
 if __name__ == "__main__":
-    src = "inputs/7.jpg"
+    src = "inputs/8.png"
     img = cv2.imread(src)
 
     res = znormalize(img)

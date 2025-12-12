@@ -1,7 +1,9 @@
 import cv2
+import time
 import numpy as np
 
 def gaussian_blur(src: np.ndarray,ksize: tuple[int,int],sigmaX: float,dst: np.ndarray | None= None,sigmaY: float = 0 ,borderType: int=cv2.BORDER_DEFAULT)->np.ndarray:
+    starttime = time.time()
     '''
         Blur the image using Gaussian_Blur
         
@@ -31,6 +33,8 @@ def gaussian_blur(src: np.ndarray,ksize: tuple[int,int],sigmaX: float,dst: np.nd
         raise ValueError("ksize values must be odd Number")
     
     outimg = cv2.GaussianBlur(src,ksize,sigmaX,dst=dst,sigmaY=sigmaY,borderType=borderType)
+    endtime = time.time()
+    print("Runtime:",endtime-starttime)
     return  outimg
 
     
