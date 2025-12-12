@@ -4,9 +4,9 @@ import numpy as np
 from typing import Optional
 
 def normalize(src: np.ndarray, alpha: float = 0.0, beta: float = 1.0, norm_type: int = cv2.NORM_MINMAX, dtype: Optional[int] = None, mask: Optional[np.ndarray] = None) -> np.ndarray:
-    starttime = time.time()
+    start_time = time.time()
     """
-    0-255 normalization scales the pixel intensity values of an image to a floating-point range of 0.0,255.0, where the minimum value in the original image becomes 0.0 and the maximum value becomes 255.0.
+    Normalizing images based on 0-1 and 0-255 normalization.
 
     Parameters:
         src: input image (H,W) or (H,W,C). Any numeric dtype.
@@ -32,10 +32,10 @@ def normalize(src: np.ndarray, alpha: float = 0.0, beta: float = 1.0, norm_type:
         dtype = cv2.CV_32F if beta <= 1.0 else cv2.CV_8U
 
     # cv2.normalize accepts multi-channel images directly
-    out = cv2.normalize(src, None, alpha, beta, norm_type, dtype, mask)
-    endtime = time.time()
-    print("Runtime: ",endtime-starttime)
-    return out
+    out_img = cv2.normalize(src, None, alpha, beta, norm_type, dtype, mask)
+    end_time = time.time()
+    print(f"Exicution Time: {end_time - start_time}")
+    return out_img
 
 
 def normalize_0_1(src: np.ndarray, mask: Optional[np.ndarray] = None) -> np.ndarray:

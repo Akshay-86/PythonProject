@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 
 def nonlocalmean_gray(src: np.ndarray, dst: Optional[np.ndarray] = None, h: float = 3.0,templateWindowSize: int = 7, searchWindowSize: int = 21) -> np.ndarray:
-    starttime = time.time()
+    start_time = time.time()
     """
     Denoise a single-channel (grayscale) image using OpenCV fastNlMeansDenoising.
 
@@ -36,13 +36,14 @@ def nonlocalmean_gray(src: np.ndarray, dst: Optional[np.ndarray] = None, h: floa
     if searchWindowSize <= 0 or searchWindowSize % 2 == 0:
         raise ValueError("searchWindowSize must be a positive odd integer.")
     
-    endtime = time.time()
-    print("Runtime: ",endtime-starttime)
-    return cv2.fastNlMeansDenoising(src, dst=dst, h=h, templateWindowSize=templateWindowSize,searchWindowSize=searchWindowSize)
+    out_img = cv2.fastNlMeansDenoising(src, dst=dst, h=h, templateWindowSize=templateWindowSize,searchWindowSize=searchWindowSize)
+    end_time = time.time()
+    print(f"Exicution Time: {end_time - start_time}")
+    return out_img
 
 
 def nonlocalmean_color(src: np.ndarray, dst: Optional[np.ndarray] = None, h: float = 3.0,hColor: float = 3.0, templateWindowSize: int = 7, searchWindowSize: int = 21) -> np.ndarray:
-    starttime = time.time()
+    start_time = time.time()
     """
     Denoise a color image using OpenCV fastNlMeansDenoisingColored.
 
@@ -76,9 +77,10 @@ def nonlocalmean_color(src: np.ndarray, dst: Optional[np.ndarray] = None, h: flo
     if searchWindowSize <= 0 or searchWindowSize % 2 == 0:
         raise ValueError("searchWindowSize must be a positive odd integer.")
     
-    endtime = time.time()
-    print("Runtime: ",endtime-starttime)
-    return cv2.fastNlMeansDenoisingColored(src, dst=dst, h=h, hColor=hColor,templateWindowSize=templateWindowSize, searchWindowSize=searchWindowSize)
+    out_img = cv2.fastNlMeansDenoisingColored(src, dst=dst, h=h, hColor=hColor,templateWindowSize=templateWindowSize, searchWindowSize=searchWindowSize)
+    end_time = time.time()
+    print(f"Exicution Time: {end_time - start_time}")
+    return out_img
 
     
 

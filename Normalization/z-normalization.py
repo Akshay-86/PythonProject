@@ -3,7 +3,7 @@ import time
 import numpy as np
 
 def znormalize(src: np.ndarray) -> np.ndarray:
-    starttime = time.time()
+    start_time = time.time()
     """
     Docstring for znormalize
     
@@ -26,11 +26,11 @@ def znormalize(src: np.ndarray) -> np.ndarray:
 
     std[std == 0] = 1.0
 
-    normalized_img = (img_float - mean) / std
+    out_img = (img_float - mean) / std
 
-    endtime = time.time()
-    print("Runtime: ",endtime-starttime)
-    return normalized_img
+    end_time = time.time()
+    print(f"Exicution Time: {end_time - start_time}")
+    return out_img
 
 
 if __name__ == "__main__":

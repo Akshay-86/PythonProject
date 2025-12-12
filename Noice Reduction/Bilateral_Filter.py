@@ -3,7 +3,7 @@ import time
 import numpy as np
 
 def bilateral_blur(src: np.ndarray,d: int,sigmaColor: float,sigmaSpace: float,dst: np.ndarray | None = None,borderType: int = cv2.BORDER_DEFAULT)->np.ndarray:
-    starttime = time.time()
+    start_time = time.time()
     '''
         Advanced blur technique that excels at reducing noise while preserving sharp edges.
 
@@ -29,10 +29,10 @@ def bilateral_blur(src: np.ndarray,d: int,sigmaColor: float,sigmaSpace: float,ds
     if sigmaColor<0 or sigmaSpace<0:
         raise ValueError("sigmaColor and sigmaValue must be >=0")
     
-    outimg = cv2.bilateralFilter(src,d,sigmaColor,sigmaSpace,dst=dst,borderType=borderType)
-    endtime = time.time()
-    print("Runtime: ",endtime-starttime)
-    return outimg
+    out_img = cv2.bilateralFilter(src,d,sigmaColor,sigmaSpace,dst=dst,borderType=borderType)
+    end_time = time.time()
+    print(f"Exicution Time: {end_time - start_time}")
+    return out_img
 
 if __name__=="__main__":
     src = "inputs/1.jpg"
