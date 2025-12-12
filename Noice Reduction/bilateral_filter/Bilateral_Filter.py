@@ -1,9 +1,9 @@
 import cv2
 import time
 import numpy as np
+from brisque import BRISQUE
 
 def bilateral_blur(src: np.ndarray,d: int,sigmaColor: float,sigmaSpace: float,dst: np.ndarray | None = None,borderType: int = cv2.BORDER_DEFAULT)->np.ndarray:
-    start_time = time.time()
     '''
         Advanced blur technique that excels at reducing noise while preserving sharp edges.
 
@@ -23,6 +23,7 @@ def bilateral_blur(src: np.ndarray,d: int,sigmaColor: float,sigmaSpace: float,ds
         Raises:
             ValueError: If bad arguments recived.
     '''
+    start_time = time.time()
 
     if src is None:
         raise ValueError("Source is NONE")

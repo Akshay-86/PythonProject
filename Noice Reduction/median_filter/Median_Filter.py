@@ -1,9 +1,9 @@
 import cv2
+import os
 import time 
 import numpy as np
 
 def median_blur(src: np.ndarray,ksize: int)->np.ndarray:
-    start_time = time.time()
     """
         Applying non-linear medianBlur filter
 
@@ -19,6 +19,7 @@ def median_blur(src: np.ndarray,ksize: int)->np.ndarray:
         Raises: 
             ValueError: if bad arguments recived
     """
+    start_time = time.time()
     
     if src is None:
         raise ValueError("Source is NONE")
@@ -32,6 +33,7 @@ def median_blur(src: np.ndarray,ksize: int)->np.ndarray:
 
 
 if __name__ == "__main__":
+    print(f"Current Working Directory: {os.getcwd()}") 
     src = "inputs/1.jpg"
     img = cv2.imread(src)
     ksize = 3

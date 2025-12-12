@@ -3,7 +3,6 @@ import time
 import numpy as np
 
 def gaussian_blur(src: np.ndarray,ksize: tuple[int,int],sigmaX: float,dst: np.ndarray | None= None,sigmaY: float = 0 ,borderType: int=cv2.BORDER_DEFAULT)->np.ndarray:
-    start_time = time.time()
     '''
         Blur the image using Gaussian_Blur
         
@@ -24,6 +23,7 @@ def gaussian_blur(src: np.ndarray,ksize: tuple[int,int],sigmaX: float,dst: np.nd
             ValueError: If bad arguments recived.
 
     '''
+    start_time = time.time()
 
     if src is None:
         raise ValueError("Source is NONE")

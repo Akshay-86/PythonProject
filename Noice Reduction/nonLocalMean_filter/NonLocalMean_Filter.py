@@ -2,11 +2,10 @@ import cv2
 import numpy as np 
 import time
 from typing import Optional
+from brisque import BRISQUE
 
 def non_local_filter(src: np.ndarray, dst: Optional[np.ndarray] = None, h: float = 3.0,hColor: float = 3.0, templateWindowSize: int = 7, searchWindowSize: int = 21) -> np.ndarray:
-
-        start_time = time.time()
-
+        
         """
         Denoise a image using OpenCV fastNlMeansDenoising.
 
@@ -30,6 +29,9 @@ def non_local_filter(src: np.ndarray, dst: Optional[np.ndarray] = None, h: float
         np.ndarray
             Denoised grayscale image.
         """
+        start_time = time.time()
+
+
         if not isinstance(src, np.ndarray):
             raise TypeError("src must be a numpy.ndarray.")
         if templateWindowSize <= 0 or templateWindowSize % 2 == 0:
@@ -44,21 +46,19 @@ def non_local_filter(src: np.ndarray, dst: Optional[np.ndarray] = None, h: float
         
         end_time = time.time()
 
-        print(f'Execution Time for Non-local noise reduction filter: {end_time-start_time}')
+        print(f'Execution Time: {end_time-start_time}')
 
         return out_img
 
 if __name__=="__main__":
     src  = "inputs/3.jpg"
-    img = cv2.imread(src,cv2.IMREAD_GRAYSCALE)
+    img = cv2.imread(src)
     dst = np.array([])
     h = 10
     hColor = 10
     templateWindowSize = 7
     searchWindowSize = 21
-
     res = non_local_filter(img,h=h,hColor=hColor)
-   
     cv2.imshow("",res)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

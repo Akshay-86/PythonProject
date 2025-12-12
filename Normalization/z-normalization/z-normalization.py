@@ -3,7 +3,6 @@ import time
 import numpy as np
 
 def znormalize(src: np.ndarray) -> np.ndarray:
-    start_time = time.time()
     """
     Docstring for znormalize
     
@@ -13,6 +12,7 @@ def znormalize(src: np.ndarray) -> np.ndarray:
     Returns: 
         Image_ndarray: Result z_score normalized image.
     """
+    start_time = time.time()
 
     if src is None:
         raise ValueError("No image received")
