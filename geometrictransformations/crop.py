@@ -47,11 +47,11 @@ def crop(src: np.ndarray, start_point: Tuple[int, int], end_point: Tuple[int, in
         raise ValueError(f"Crop region ({x2},{y2}) exceeds image size ({w},{h}).")
 
     #  Crop Operation
-    cropped = src[y1:y2, x1:x2]
+    out_img = src[y1:y2, x1:x2]
 
     end_time = time.time()
     print(f"Executed Time: {end_time-start_time:.6f} s")
-    return cropped
+    return out_img
 
 
 if __name__ == "__main__":
