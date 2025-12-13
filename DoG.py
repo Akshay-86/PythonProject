@@ -1,17 +1,8 @@
 import cv2
 import time
 import numpy as np
-from typing import Tuple
 
-
-def difference_of_gaussian(
-    src: np.ndarray,
-    ksize1: Tuple[int, int] = (5, 5),
-    sigma1: float = 1.0,
-    ksize2: Tuple[int, int] = (9, 9),
-    sigma2: float = 2.0,
-    normalize: bool = True
-) -> np.ndarray:
+def difference_of_gaussian(src: np.ndarray, ksize1: tuple[int, int] = (5, 5), sigma1: float = 1.0, ksize2: tuple[int, int] = (9, 9), sigma2: float = 2.0, normalize: bool = True) -> np.ndarray:
     """
     Apply Difference of Gaussian (DoG) edge detection.
 
@@ -76,6 +67,7 @@ def difference_of_gaussian(
     if normalize:
         out_img = cv2.normalize(out_img, None, 0, 255, cv2.NORM_MINMAX)
         out_img = out_img.astype(np.uint8)
+        
     end_time = time.time()
     print(f"Executed Time: {end_time - start_time:.6f}s")
     return out_img

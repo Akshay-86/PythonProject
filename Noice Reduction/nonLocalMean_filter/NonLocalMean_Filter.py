@@ -59,6 +59,8 @@ if __name__=="__main__":
     templateWindowSize = 7
     searchWindowSize = 21
     res = non_local_filter(img,h=h,hColor=hColor)
+    b = BRISQUE()
+    print(b.score(img))
     cv2.imshow("",res)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
