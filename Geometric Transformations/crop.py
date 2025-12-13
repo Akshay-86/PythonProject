@@ -1,10 +1,8 @@
 import cv2
 import time
 import numpy as np
-from typing import Tuple
 
-
-def crop(src: np.ndarray, start_point: Tuple[int, int], end_point: Tuple[int, int]) -> np.ndarray:
+def crop(src: np.ndarray, start_point: tuple[int, int], end_point: tuple[int, int]) -> np.ndarray:
     """
     Crop a region from an image.
 
@@ -30,7 +28,7 @@ def crop(src: np.ndarray, start_point: Tuple[int, int], end_point: Tuple[int, in
     start_time = time.time()
 
     if src is None:
-        raise ValueError("`src` is None — image not loaded.")
+        raise ValueError("src is None — image not loaded.")
 
     if len(start_point) != 2 or len(end_point) != 2:
         raise ValueError("start_point and end_point must be tuples of (x, y).")

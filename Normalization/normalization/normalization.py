@@ -3,7 +3,7 @@ import time
 import numpy as np
 from typing import Optional
 
-def normalize(src: np.ndarray, alpha: float = 0.0, beta: float = 1.0, norm_type: int = cv2.NORM_MINMAX, dtype: Optional[int] = None, mask: Optional[np.ndarray] = None) -> np.ndarray:
+def normalize(src: np.ndarray, alpha: float = 0.0, beta: float = 1.0, norm_type: int = cv2.NORM_MINMAX, dtype: int = None, mask: np.ndarray | None = None) -> np.ndarray:
     """
     Performs 0-1, 0-255, or custom-range normalization depending on beta
 

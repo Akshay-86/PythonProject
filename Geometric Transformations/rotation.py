@@ -1,19 +1,8 @@
 import cv2
 import time
 import numpy as np
-from typing import Optional, Tuple
 
-
-def rotate(
-    src: np.ndarray,
-    angle: float,
-    center: Optional[Tuple[float, float]] = None,
-    scale: float = 1.0,
-    dst: Optional[np.ndarray] = None,
-    flags: int = cv2.INTER_LINEAR,
-    borderMode: int = cv2.BORDER_CONSTANT,
-    borderValue: Tuple[int, int, int] = (0, 0, 0),
-) -> np.ndarray:
+def rotate(src: np.ndarray, angle: float, center: tuple[float, float] = None, scale: float = 1.0, dst: np.ndarray | None = None, flags: int = cv2.INTER_LINEAR, borderMode: int = cv2.BORDER_CONSTANT, borderValue: tuple[int, int, int] = (0, 0, 0)) -> np.ndarray:
     """
     Rotate an image by a given angle around a center point.
 
@@ -72,7 +61,7 @@ def rotate(
     # compute bounding box to avoid cropping (optional: keep same size here)
     # If you want to keep whole rotated image without cropping, compute new size.
     # For simplicity we'll keep original image size (w, h) — same as many cv2 apps.
-    rotated = cv2.warpAffine(
+    out_img = cv2.warpAffine(
         src,
         M,
         (w, h),
@@ -84,7 +73,7 @@ def rotate(
     end_time = time.time()
     print(f"Executed Time: {end_time-start_time:.6f} s")
 
-    return rotated
+    return out_img
 
 
 if __name__ == "__main__":

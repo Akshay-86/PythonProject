@@ -9,7 +9,7 @@ def resize(src: np.ndarray, dsize: tuple[int,int], dst: np.ndarray | None = None
         Parameters:
             src (np.ndarray) : Actual image you want to resize.
             dsize (tuple) : Desired size of output image.
-            fx (float) : Horizontal scaling factor.efaultVal = 0
+            fx (float) : Horizontal scaling factor.DefaultVal = 0
             fy (float) : Vertical scaling factor.DefaultVal = 0
             interpolation (int) : interpolation method.DefaultVal = cv2.INTER_LINEAR 
     '''
@@ -22,9 +22,9 @@ def resize(src: np.ndarray, dsize: tuple[int,int], dst: np.ndarray | None = None
     using_scale = (fx > 0 and fy > 0)
 
     if using_dsize and using_scale:
-        raise ValueError("Provide either valid `dsize` (both >0) OR both `fx` and `fy` (>0), not both.")
+        raise ValueError("Provide either valid dsize (both >0) OR both fx and fy (>0), not both.")
     if not using_dsize and not using_scale:
-        raise ValueError("You must provide either `dsize` (width,height) or both `fx` and `fy` (>0).")
+        raise ValueError("You must provide either dsize (width,height) or both fx and fy (>0).")
     
     out_img = cv2.resize(src,dsize,dst,fx,fy,interpolation)
     end_time = time.time()

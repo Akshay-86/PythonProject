@@ -3,14 +3,7 @@ from typing import Optional
 import cv2
 import numpy as np
 
-def channel_normalize(
-    src: np.ndarray,
-    alpha: float = 0.0,
-    beta: float = 1.0,
-    norm_type: int = cv2.NORM_MINMAX,
-    dtype: Optional[int] = None,
-    mask: Optional[np.ndarray] = None
-) -> np.ndarray:
+def channel_normalize(src: np.ndarray, alpha: float = 0.0, beta: float = 1.0, norm_type: int = cv2.NORM_MINMAX, dtype: int = None, mask: np.ndarray | None = None) -> np.ndarray:
     """
     Channel-wise normalization. Single function that auto-selects dtype
     when `dtype` is None, using `beta` as a hint:

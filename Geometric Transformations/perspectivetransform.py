@@ -1,18 +1,9 @@
 import cv2
 import time
 import numpy as np
-from typing import Tuple
 
 
-def perspective_transform(
-    src: np.ndarray,
-    src_points: np.ndarray,
-    dst_points: np.ndarray,
-    dsize: Tuple[int, int],
-    flags: int = cv2.INTER_LINEAR,
-    borderMode: int = cv2.BORDER_CONSTANT,
-    borderValue: Tuple[int, int, int] = (0, 0, 0),
-) -> np.ndarray:
+def perspective_transform(src: np.ndarray, src_points: np.ndarray, dst_points: np.ndarray, dsize: tuple[int, int], flags: int = cv2.INTER_LINEAR, borderMode: int = cv2.BORDER_CONSTANT, borderValue: tuple[int, int, int] = (0, 0, 0)) -> np.ndarray:
     """
     Apply a perspective (projective) transformation to an image.
 
@@ -22,7 +13,11 @@ def perspective_transform(
         Input image (must not be None).
     src_points : np.ndarray
         Source points (4x2) in the input image.
-        Format: [[x1,y1], [x2,y2], [x3,y3], [x4,y4]]
+        Format: [[x1,y1], [x2,y2], [x3,y3], [x4,y4]] where 
+            x1,y1 -> top-left corner, 
+            x2,y2 -> top-right corner, 
+            x3,y3 -> bottom-right corner, 
+            x4,y4 -> bottom-left.
     dst_points : np.ndarray
         Destination points (4x2) defining output mapping.
     dsize : tuple[int, int]
@@ -48,22 +43,22 @@ def perspective_transform(
     start_time = time.time()
     # Validation
     if src is None:
-        raise ValueError("`src` is None — image not loaded.")
+        raise ValueError("src is None — image not loaded.")
 
     if not isinstance(dsize, tuple) or len(dsize) != 2:
-        raise ValueError("`dsize` must be a tuple (width, height).")
+        raise ValueError("dsize must be a tuple (width, height).")
 
     if dsize[0] <= 0 or dsize[1] <= 0:
-        raise ValueError("`dsize` values must be positive.")
+        raise ValueError("dsize values must be positive.")
 
     src_points = np.asarray(src_points, dtype=np.float32)
     dst_points = np.asarray(dst_points, dtype=np.float32)
 
     if src_points.shape != (4, 2):
-        raise ValueError("`src_points` must have shape (4, 2).")
+        raise ValueError("src_points must have shape (4, 2).")
 
     if dst_points.shape != (4, 2):
-        raise ValueError("`dst_points` must have shape (4, 2).")
+        raise ValueError("dst_points must have shape (4, 2).")
 
    
     # Compute perspective transformation matrix
@@ -86,7 +81,7 @@ def perspective_transform(
 
 
 if __name__ == "__main__":
-    src_path = "inputs/1.jpg"
+    src_path = "inputs/9.jpg"
     img = cv2.imread(src_path)
 
     if img is None:
@@ -96,10 +91,10 @@ if __name__ == "__main__":
 
     # Example source points (corners of a tilted document)
     src_pts = np.array([
-        [200, 30],
-        [850, 30],
-        [1000, 300],
-        [100, 300]
+        [41, 48],
+        [282, 40],
+        [298, 297],
+        [19, 293]
     ], dtype=np.float32)
 
     # Destination points (perfect rectangle)
