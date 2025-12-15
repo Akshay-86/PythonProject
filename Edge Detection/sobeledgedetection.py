@@ -75,19 +75,19 @@ def sobel_edge(src: np.ndarray, ddepth: int = cv2.CV_64F, dx: int = 1, dy: int =
 
     # Combine results correctly
     if grad_x is not None and grad_y is not None:
-        magnitude = cv2.magnitude(
+        out_img = cv2.magnitude(
             grad_x.astype(np.float32),
             grad_y.astype(np.float32)
         )
     elif grad_x is not None:
-        magnitude = np.abs(grad_x)
+        out_img = np.abs(grad_x)
     else:
-        magnitude = np.abs(grad_y)
+        out_img = np.abs(grad_y)
 
-    magnitude = cv2.convertScaleAbs(magnitude)
+    out_img = cv2.convertScaleAbs(out_img)
 
     print(f"Executed Time: {time.time() - start:.6f}s")
-    return magnitude
+    return out_img
 
 
 if __name__ == "__main__":

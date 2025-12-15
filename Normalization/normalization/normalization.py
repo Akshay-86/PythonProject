@@ -56,7 +56,7 @@ def normalize(src: np.ndarray, alpha: float = 0.0, beta: float = 1.0, norm_type:
         else:
             dtype = cv2.CV_32F if beta <= 1.0 else cv2.CV_8U
 
-    # OpenCV allows direct multi-channel normalization
+    #  direct multi-channel normalization
     out_img = cv2.normalize(src, None, alpha, beta, norm_type, dtype, mask)
 
     end_time = time.time()

@@ -1,99 +1,90 @@
-import cv2
-import time
+from __future__ import print_function
+import cv2 as cv
 import numpy as np
-from typing import Tuple
-
-
-def difference_of_gaussian(
-    src: np.ndarray,
-    ksize1: Tuple[int, int] = (5, 5),
-    sigma1: float = 1.0,
-    ksize2: Tuple[int, int] = (9, 9),
-    sigma2: float = 2.0,
-    normalize: bool = True
-) -> np.ndarray:
-    """
-    Apply Difference of Gaussian (DoG) edge detection.
-
-    Parameters
-    ----------
-    src : np.ndarray
-        Input image (grayscale or color).
-    ksize1 : tuple[int, int]
-        Kernel size for first Gaussian blur (odd, positive).
-    sigma1 : float
-        Sigma for first Gaussian blur.
-    ksize2 : tuple[int, int]
-        Kernel size for second Gaussian blur (odd, positive).
-    sigma2 : float
-        Sigma for second Gaussian blur (must be > sigma1).
-    normalize : bool
-        If True, normalize output to 0-255.
-
-    Returns
-    -------
-    np.ndarray
-        DoG response image.
-
-    Raises
-    ------
-    ValueError
-        If parameters are invalid.
-    """
-    start_time = time.time()
-
-    # Validation
+import argparse
+src = None
+erosion_size = 0
+max_elem = 2
+max_kernel_size = 21
+title_trackbar_element_shape = 'Element:\n 0: Rect \n 1: Cross \n 2: Ellipse'
+title_trackbar_kernel_size = 'Kernel size:\n 2n +1'
+title_erosion_window = 'Erosion Demo'
+title_dilation_window = 'Dilation Demo'
+def main(image):
+    global src
+    src = cv.imread(cv.samples.findFile(image))
     if src is None:
-        raise ValueError("`src` is None")
-
-    if sigma1 <= 0 or sigma2 <= 0:
-        raise ValueError("sigma values must be positive")
-
-    if sigma2 <= sigma1:
-        raise ValueError("sigma2 must be greater than sigma1")
-
-    if ksize1[0] <= 0 or ksize1[0] % 2 == 0:
-        raise ValueError("ksize1 must be positive and odd")
-
-    if ksize2[0] <= 0 or ksize2[0] % 2 == 0:
-        raise ValueError("ksize2 must be positive and odd")
-
-    # Convert to grayscale
-    if src.ndim == 3:
-        gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-    else:
-        gray = src
-
-    gray = gray.astype(np.float32)
-
-    # DoG computation 
-
-    blur1 = cv2.GaussianBlur(gray, ksize1, sigma1)
-    blur2 = cv2.GaussianBlur(gray, ksize2, sigma2)
-
-    out_img = blur1 - blur2
-
-    if normalize:
-        out_img = cv2.normalize(out_img, None, 0, 255, cv2.NORM_MINMAX)
-        out_img = out_img.astype(np.uint8)
-    end_time = time.time()
-    print(f"Executed Time: {end_time - start_time:.6f}s")
-    return out_img
-
-
+        print('Could not open or find the image: ', image)
+        exit(0)
+    cv.namedWindow(title_erosion_window)
+    cv.createTrackbar(title_trackbar_element_shape, title_erosion_window, 0, max_elem, erosion)
+    cv.createTrackbar(title_trackbar_kernel_size, title_erosion_window, 0, max_kernel_size, erosion)
+    cv.namedWindow(title_dilation_window)
+    cv.createTrackbar(title_trackbar_element_shape, title_dilation_window, 0, max_elem, dilatation)
+    cv.createTrackbar(title_trackbar_kernel_size, title_dilation_window, 0, max_kernel_size, dilatation)
+    erosion(0)
+    dilatation(0)
+    cv.waitKey()
+# optional mapping of values with morphological shapes
+def morph_shape(val):
+    if val == 0:
+        return cv.MORPH_RECT
+    elif val == 1:
+        return cv.MORPH_CROSS
+    elif val == 2:
+        return cv.MORPH_ELLIPSE
+def erosion(val):
+    erosion_size = cv.getTrackbarPos(title_trackbar_kernel_size, title_erosion_window)
+    erosion_shape = morph_shape(cv.getTrackbarPos(title_trackbar_element_shape, title_erosion_window))
+    
+    element = cv.getStructuringElement(erosion_shape, (2 * erosion_size + 1, 2 * erosion_size + 1),
+                                       (erosion_size, erosion_size))
+    
+    erosion_dst = cv.erode(src, element)
+    cv.imshow(title_erosion_window, erosion_dst)
+def dilatation(val):
+    dilatation_size = cv.getTrackbarPos(title_trackbar_kernel_size, title_dilation_window)
+    dilation_shape = morph_shape(cv.getTrackbarPos(title_trackbar_element_shape, title_dilation_window))
+    element = cv.getStructuringElement(dilation_shape, (2 * dilatation_size + 1, 2 * dilatation_size + 1),
+                                       (dilatation_size, dilatation_size))
+    dilatation_dst = cv.dilate(src, element)
+    cv.imshow(title_dilation_window, dilatation_dst)
 if __name__ == "__main__":
-    img = cv2.imread("inputs/1.jpg")
-    if img is None:
-        raise SystemExit("Image not found")
+    parser = argparse.ArgumentParser(description='Code for Eroding and Dilating tutorial.')
+    parser.add_argument('--input', help='Path to input image.', default='inputs/1.jpg')
+    args = parser.parse_args()
+    main(args.input)
 
-    dog_edges = difference_of_gaussian(
-        img,
-        ksize1=(5, 5),
-        sigma1=1.0,
-        ksize2=(9, 9),
-        sigma2=2.0
-    )
+def main(image):
+    global src
+    src = cv.imread(cv.samples.findFile(image))
+    if src is None:
+        print('Could not open or find the image: ', image)
+        exit(0)
+    cv.namedWindow(title_erosion_window)
+    cv.createTrackbar(title_trackbar_element_shape, title_erosion_window, 0, max_elem, erosion)
+    cv.createTrackbar(title_trackbar_kernel_size, title_erosion_window, 0, max_kernel_size, erosion)
+    cv.namedWindow(title_dilation_window)
+    cv.createTrackbar(title_trackbar_element_shape, title_dilation_window, 0, max_elem, dilatation)
+    cv.createTrackbar(title_trackbar_kernel_size, title_dilation_window, 0, max_kernel_size, dilatation)
+    erosion(0)
+    dilatation(0)
+    cv.waitKey()
 
-    cv2.imshow("Difference of Gaussian", dog_edges)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+def erosion(val):
+    erosion_size = cv.getTrackbarPos(title_trackbar_kernel_size, title_erosion_window)
+    erosion_shape = morph_shape(cv.getTrackbarPos(title_trackbar_element_shape, title_erosion_window))
+    
+    element = cv.getStructuringElement(erosion_shape, (2 * erosion_size + 1, 2 * erosion_size + 1),
+                                       (erosion_size, erosion_size))
+    
+    erosion_dst = cv.erode(src, element)
+    cv.imshow(title_erosion_window, erosion_dst)
+
+def dilatation(val):
+    dilatation_size = cv.getTrackbarPos(title_trackbar_kernel_size, title_dilation_window)
+    dilation_shape = morph_shape(cv.getTrackbarPos(title_trackbar_element_shape, title_dilation_window))
+    element = cv.getStructuringElement(dilation_shape, (2 * dilatation_size + 1, 2 * dilatation_size + 1),
+                                       (dilatation_size, dilatation_size))
+    dilatation_dst = cv.dilate(src, element)
+    cv.imshow(title_dilation_window, dilatation_dst)

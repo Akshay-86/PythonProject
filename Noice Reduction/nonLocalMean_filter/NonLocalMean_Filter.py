@@ -4,7 +4,7 @@ import time
 from typing import Optional
 from brisque import BRISQUE
 
-def non_local_filter(src: np.ndarray, dst: Optional[np.ndarray] = None, h: float = 3.0,hColor: float = 3.0, templateWindowSize: int = 7, searchWindowSize: int = 21) -> np.ndarray:
+def non_local_filter(src: np.ndarray, dst: np.ndarray | None = None, h: float = 3.0,hColor: float = 3.0, templateWindowSize: int = 7, searchWindowSize: int = 21) -> np.ndarray:
         
         """
         Denoise a image using OpenCV fastNlMeansDenoising.
@@ -54,13 +54,13 @@ if __name__=="__main__":
     src  = "inputs/3.jpg"
     img = cv2.imread(src)
     dst = np.array([])
-    h = 10
-    hColor = 10
-    templateWindowSize = 7
-    searchWindowSize = 21
+    h = 7
+    hColor = 7
+    templateWindowSize = 9
+    searchWindowSize = 23
     res = non_local_filter(img,h=h,hColor=hColor)
     b = BRISQUE()
-    print(b.score(img))
+    print(b.score(res))
     cv2.imshow("",res)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

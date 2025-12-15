@@ -36,7 +36,7 @@ def bilateral_blur(src: np.ndarray,d: int,sigmaColor: float,sigmaSpace: float,ds
     return out_img
 
 if __name__=="__main__":
-    src = "inputs/1.jpg"
+    src = "inputs/5.jpg"
     img = cv2.imread(src)
     d = 10
     sigmaColor = 50
@@ -45,8 +45,8 @@ if __name__=="__main__":
     bordertype = cv2.BORDER_DEFAULT
 
     res = bilateral_blur(img,d,sigmaColor,sigmaSpace)
-    cv2.putText(res,f"d:{d},SigmaColor:{sigmaColor},sigmaSpace:{sigmaSpace}",(0,15),5,1,(0,0,255))
+    b = BRISQUE()
+    print(b.score(res))
     cv2.imshow("",res)
-    cv2.imwrite("test/noice_reduction/bilateral_filter/1.jpg",res)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

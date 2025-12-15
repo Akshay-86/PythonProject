@@ -58,7 +58,6 @@ def canny_edge(src: np.ndarray, threshold1: float = None, threshold2: float = No
         gray,
         threshold1=threshold1,
         threshold2=threshold2,
-        edges=edges,
         apertureSize=apertureSize,
         L2gradient=L2gradient
     )
@@ -76,9 +75,9 @@ if __name__ == "__main__":
     if img is None:
         raise SystemExit(f"Error: could not load image from {src_path}")
 
-    edges = canny_edge(img)
+    im = canny_edge(img,threshold1=100,threshold2=200)
 
-    cv2.imshow("Canny Edge Detection", edges)
+    cv2.imshow("Canny Edge Detection",im )
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     cv2.Canny()

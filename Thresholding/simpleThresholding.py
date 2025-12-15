@@ -38,21 +38,25 @@ def simple_threshold(src: np.ndarray, thresh: float, maxval: float = 255,thresh_
     else:
         gray = src
 
+    total_pixels = gray.size
+    fg_pixels = np.count_nonzero(gray)
+
     
     _, img_out = cv2.threshold(gray, thresh, maxval, thresh_type)
     end_time = time.time()
     print(f"Executed Time: {end_time - start_time:.6f}s")
 
-    return img_out
+    return img_out,fg_pixels / total_pixels
 
 
 if __name__ == "__main__":
-    img = cv2.imread("inputs/1.jpg")
+    img = cv2.imread("inputs/4.jpg")
     if img is None:
         raise SystemExit("Image not found")
 
-    res = simple_threshold(img, thresh=256)
+    res,re = simple_threshold(img, thresh=150,maxval=200,thresh_type=cv2.THRESH_BINARY)
 
+    print(re)
     cv2.imshow("Simple Threshold", res)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
