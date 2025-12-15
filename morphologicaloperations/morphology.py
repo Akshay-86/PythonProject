@@ -8,7 +8,7 @@ def morphology(src: np.ndarray, op: int = cv2.MORPH_OPEN, kernal: np.ndarray | N
     
     Parameters:
         src (np.ndarray) : The input image (source array) to be eroded.Grayscale image recomended.
-        op (int): To deside the morphological operation in your image. PossibleValues 0-7.
+        op (int): To deside the morphological operation in your image. PossibleValues 0-6.
             0 -> cv2.MORPH_ERODE, 
             1 -> cv2.MORPH_DILATE, 
             2 -> cv2.MORPH_OPEN, 
@@ -47,8 +47,8 @@ def morphology(src: np.ndarray, op: int = cv2.MORPH_OPEN, kernal: np.ndarray | N
     if iterations < 1:
         raise ValueError("Itarations Must be positive number")
     
-    if op > 6:
-        raise ValueError("op value muist be <= 6")
+    if op > 6 or op < 0:
+        raise ValueError("op value muist be bewteen 0-6")
     
     out_img = cv2.morphologyEx(src,op,kernal,dst,anchor,iterations,borderType,borderValue)
     end_time = time.time()
@@ -58,7 +58,7 @@ def morphology(src: np.ndarray, op: int = cv2.MORPH_OPEN, kernal: np.ndarray | N
 if __name__ == "__main__":
     src = "inputs/2.jpg"
     img = cv2.imread(src)
-    res = morphology(img,op=cv2.MORPH_BLACKHAT,iterations=10)
+    res = morphology(img,op=-4,iterations=0)
     res1 = np.hstack((img,res))
     cv2.imshow("",res1)
     cv2.waitKey(0)
