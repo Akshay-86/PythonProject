@@ -49,27 +49,39 @@ def difference_of_gaussian(src: np.ndarray, ksize1: tuple[int, int] = (5, 5), si
     if ksize2[0] <= 0 or ksize2[0] % 2 == 0:
         raise ValueError("ksize2 must be positive and odd")
 
-    # Convert to grayscale
-    if src.ndim == 3:
-        gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-    else:
-        gray = src
+    try:
+        # Convert to grayscale if needed
+        if src.ndim == 3:
+            gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+        elif src.ndim == 2:
+            gray = src
+        else:
+            raise ValueError("Unsupported image dimensions")
 
-    gray = gray.astype(np.float32)
+        gray = gray.astype(np.float32)
 
-    # DoG computation 
+        # Gaussian blurs
+        blur1 = cv2.GaussianBlur(gray, ksize1, sigma1)
+        blur2 = cv2.GaussianBlur(gray, ksize2, sigma2)
 
-    blur1 = cv2.GaussianBlur(gray, ksize1, sigma1)
-    blur2 = cv2.GaussianBlur(gray, ksize2, sigma2)
+        # Difference of Gaussian
+        out_img = blur1 - blur2
 
-    out_img = blur1 - blur2
+        # Optional normalization
+        if normalize:
+            out_img = cv2.normalize(out_img, None, 0, 255, cv2.NORM_MINMAX)
+            out_img = out_img.astype(np.uint8)
 
-    if normalize:
-        out_img = cv2.normalize(out_img, None, 0, 255, cv2.NORM_MINMAX)
-        out_img = out_img.astype(np.uint8)
-        
-    end_time = time.time()
-    print(f"Executed Time: {end_time - start_time:.6f}s")
+    except cv2.error as e:
+        raise RuntimeError(f"OpenCV error during DoG computation: {e}") from e
+
+    except Exception as e:
+        raise RuntimeError(f"Unexpected error during DoG computation: {e}") from e
+
+    finally:
+        end_time = time.time()
+        print(f"Executed Time: {end_time - start_time:.6f}s")
+
     return out_img
 
 

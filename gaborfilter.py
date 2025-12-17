@@ -4,7 +4,7 @@ import numpy as np
 from brisque import BRISQUE
 
 
-def gabor_filter(src: np.ndarray, ksize: tuple[int, int] = (31,31), sigma: float = 3.0, theta: float = 45, lambd: float =10, gamma: float = 0.4, psi: float = 0, dst: np.ndarray | None = None, borderType: int = cv2.BORDER_DEFAULT) -> np.ndarray:
+def gabor_filter(src: np.ndarray, ksize: tuple[int, int] = (31,31), sigma: float = 3.0, theta: float = np.pi /4, lambd: float =10, gamma: float = 0.4, psi: float = 0, dst: np.ndarray | None = None, borderType: int = cv2.BORDER_DEFAULT) -> np.ndarray:
 
     '''
         Apply Gabor filter for texture and directional feature extraction.
@@ -42,24 +42,48 @@ def gabor_filter(src: np.ndarray, ksize: tuple[int, int] = (31,31), sigma: float
 
     if gamma <= 0:
         raise ValueError("gamma must be > 0")
-    
-    if ksize[1] > 51 :
-        raise Warning("Ksize value is too high,results may not be good")
 
     
-    if src.ndim == 3:
-        gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-    else:
-        gray = src
+    try:
+        # Convert to grayscale if needed
+        if src.ndim == 3:
+            gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+        elif src.ndim == 2:
+            gray = src
+        else:
+            raise ValueError("Unsupported image dimensions")
 
-    # Create Gabor kernel
-    kernel = cv2.getGaborKernel(ksize=ksize, sigma=sigma, theta=theta, lambd=lambd, gamma=gamma, psi=psi, ktype=cv2.CV_32F)
+        gray = gray.astype(np.float32)
 
-    #  Apply filter
-    out_img = cv2.filter2D(gray, ddepth=cv2.CV_8U, kernel=kernel, dst=dst, borderType=borderType)
+        # Create Gabor kernel
+        kernel = cv2.getGaborKernel(
+            ksize=ksize,
+            sigma=sigma,
+            theta=theta,
+            lambd=lambd,
+            gamma=gamma,
+            psi=psi,
+            ktype=cv2.CV_32F
+        )
 
-    end_time = time.time()
-    print(f"Execution Time: {end_time - start_time:.6f} seconds")
+        # Apply filter
+        out_img = cv2.filter2D(
+            gray,
+            ddepth=cv2.CV_8U,
+            kernel=kernel,
+            dst=dst,
+            borderType=borderType
+        )
+
+    except cv2.error as e:
+        raise RuntimeError(f"OpenCV error during Gabor filtering: {e}") from e
+
+    except Exception as e:
+        raise RuntimeError(f"Unexpected error during Gabor filtering: {e}") from e
+
+    finally:
+        end_time = time.time()
+        print(f"Execution Time: {end_time - start_time:.6f} seconds")
 
     return out_img
 

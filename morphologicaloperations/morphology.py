@@ -18,7 +18,7 @@ def morphology(src: np.ndarray, op: int = cv2.MORPH_OPEN, kernal: np.ndarray | N
             6 -> cv2.MORPH_BLACKHAT
         kernal (np.ndarray) : The structuring element used to define the shape and size of the neighborhood for the operation.Must be odd number DefaultVal = (3,3)
         dst (np.ndarray) : The output image where the result of the erosion will be stored.
-        anchor (tuple) : The position of the anchor within the structuring element.DefaultVal = (3,3)
+        anchor (tuple) : The position of the anchor within the structuring element.DefaultVal = (-1,-1)
         iterations (int) : The number of times the erosion operation is applied sequentially.Must be a positive integer (>= 1).
         borderType (int) : The method used for pixel extrapolation when the kernel goes outside image boundaries.
         borderValue (int) : The specific value to use for the border if borderType is cv2.BORDER_CONSTANT
@@ -56,9 +56,10 @@ def morphology(src: np.ndarray, op: int = cv2.MORPH_OPEN, kernal: np.ndarray | N
     return out_img
 
 if __name__ == "__main__":
-    src = "inputs/2.jpg"
+    src = "inputs/5.jpg"
     img = cv2.imread(src)
-    res = morphology(img,op=-4,iterations=0)
+    kernal = np.ones((5,5),np.uint8)      
+    res = morphology(img,op = 4,kernal=(5,5),iterations = 1)
     res1 = np.hstack((img,res))
     cv2.imshow("",res1)
     cv2.waitKey(0)
